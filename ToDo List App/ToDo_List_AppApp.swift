@@ -12,7 +12,7 @@ struct ToDo_List_AppApp: App {
     var body: some Scene {
         WindowGroup {
             TaskModuleBuilder.createModule()
-                .preferredColorScheme(.light)
+                .preferredColorScheme(.dark)
         }
     }
 }

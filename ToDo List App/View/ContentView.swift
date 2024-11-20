@@ -28,16 +28,13 @@ struct ContentView: View {
                 )
 
             }
-            .background(Constants.backgroundColor)
             .navigationTitle("Задачи")
         }
 
     }
 }
 
-private enum Constants {
-    static let backgroundColor = Color(UIColor.systemGroupedBackground)
-}
+
 
 
 #Preview {
