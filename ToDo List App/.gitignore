@@ -1,0 +1,69 @@
+# macOS specific files
+.DS_Store
+
+# Xcode specific files
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.xcworkspace
+!default.xcworkspace
+*.xcuserdatad/
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# Xcode Derived Data
+DerivedData/
+build/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+Carthage/Build/*.version
+Cartfile.resolved
+Cartfile
+
+# Accio dependency manager
+Dependencies/
+.accio/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/report.xml
+
+# Xcode playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Archive files
+*.xcarchive
+
+# Xcode environment
+xcuserdata/
+
+# App specific files
+*.ipa
+*.app.dSYM
+
+# Code Signing
+*.mobileprovision
+*.provisionprofile
+.entitlements
+
+# SwiftLint, SwiftFormat
+.swiftlint.yml
+.swiftformat
+
+# Temporary and log files
+*.log
+*.tmp
