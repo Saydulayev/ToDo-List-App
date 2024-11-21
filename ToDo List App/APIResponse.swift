@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct APIResponse: Decodable {
+struct APIResponse: Codable {
     let todos: [APITask]
 }
 
 
 
-struct APITask: Decodable {
+struct APITask: Codable {
     let id: Int
     let todo: String
     let completed: Bool

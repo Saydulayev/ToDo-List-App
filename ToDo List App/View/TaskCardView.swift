@@ -7,72 +7,64 @@
 
 import SwiftUI
 
-struct TaskCardView: View {
-    var task: TaskEntity
-    var presenter: TaskPresenter
-
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yy" 
-        return formatter
-    }()
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .top, spacing: 16) {
-                // Чекбокс
-                Button(action: {
-                    presenter.toggleTaskCompletion(task: task)
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
-                }) {
-                    ZStack {
-                        Circle()
-                            .stroke(task.isCompleted ? Color(hex: "#FED702") : Color(hex: "#4D555E"), lineWidth: 1)
+    struct TaskCardView: View {
+        var task: TaskEntity
+        var presenter: TaskPresenter
+        
+        private let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd/MM/yy"
+            return formatter
+        }()
+        
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Button(action: {
+                        presenter.toggleTaskCompletion(task: task)
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                        generator.impactOccurred()
+                    }) {
+                        Image(systemName: task.isCompleted ? "checkmark.circle" : "circle")
+                            .resizable()
                             .frame(width: 24, height: 24)
-
-                        if task.isCompleted {
-                            Image(systemName: "checkmark")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 12, height: 9)
-                                .foregroundColor(Color(hex: "#FED702"))
-                        }
+                            .foregroundColor(task.isCompleted ? Color(hex: "#FED702") : Color(hex: "#4D555E"))
+                            .fontWeight(.thin)
+                            .offset(y: 9)
                     }
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                VStack(alignment: .leading, spacing: 6) {
-                    // Заголовок задачи
-                    Text(task.title)
-                        .font(.custom("SF Pro", size: 16))
-                        .fontWeight(.medium)
-                        .strikethrough(task.isCompleted)
-                        .foregroundColor(task.isCompleted ? Color(hex: "#4D555E") : Color(hex: "#F4F4F4"))
-                        .lineLimit(1)
-
-                    // Описание задачи
-                    if !task.details.isEmpty {
-                        Text(task.details)
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    // Текст
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(task.title)
+                            .font(.custom("SF Pro", size: 16))
+                            .fontWeight(.medium)
+                            .strikethrough(task.isCompleted)
+                            .foregroundColor(task.isCompleted ? Color(hex: "#4D555E") : Color(hex: "#F4F4F4"))
+                            .tracking(-0.43)
+                            .lineLimit(1)
+                        
+                        if !task.details.isEmpty {
+                            Text(task.details)
+                                .font(.custom("SF Pro Text", size: 12))
+                                .lineSpacing(2)
+                                .foregroundColor(task.isCompleted ? Color(hex: "#4D555E") : Color(hex: "#F4F4F4"))
+                                .lineLimit(2)
+                        }
+                        
+                        Text(dateFormatter.string(from: task.createdAt))
                             .font(.custom("SF Pro Text", size: 12))
                             .foregroundColor(Color(hex: "#4D555E"))
-                            .lineLimit(2)
                     }
-
-                    // Дата создания задачи
-                    Text(dateFormatter.string(from: task.createdAt))
-                        .font(.custom("SF Pro Text", size: 12))
-                        .foregroundColor(Color(hex: "#4D555E"))
                 }
+                .frame(maxHeight: .infinity)
+                
+                Divider()
+                    .background(Color(hex: "#4D555E"))
             }
-            Divider()
-                .padding(.top, 8)
+            .padding(.horizontal, 12)
         }
-        .padding(.horizontal, 20)
-        .frame(width: 360, height: 106)
-        .cornerRadius(8)
     }
-}
 
 
 

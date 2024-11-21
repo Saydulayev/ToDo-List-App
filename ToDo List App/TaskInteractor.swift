@@ -11,18 +11,16 @@ import Foundation
 
 final class TaskInteractor: TaskInteractorProtocol {
     
-    // Используем общие константы для строковых значений
     private enum Constants {
         static let taskQueueLabel = "com.todoApp.taskQueue"
         static let titlePredicateFormat = "title == %@"
         static let idPredicateFormat = "id == %@"
-        static let apiUrl = "https://drive.google.com/uc?export=download&id=1MXypRbK2CS9fqPhTtPonn580h1sHUs2W"
+        static let apiUrl = "https://dummyjson.com/todos"
     }
     
     private let context = PersistenceController.shared.viewContext
     private let queue = DispatchQueue(label: Constants.taskQueueLabel, attributes: .concurrent)
     
-    // Fetch tasks from Core Data
     func fetchTasks(completion: @escaping ([TaskEntity]) -> Void) {
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -62,60 +60,52 @@ final class TaskInteractor: TaskInteractorProtocol {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Failed to fetch tasks: \(error)")
-                DispatchQueue.main.async {
-                    completion([])
-                }
-                return
-            }
-            
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-                print("Server returned an error: \(httpResponse.statusCode)")
-                DispatchQueue.main.async {
-                    completion([])
-                }
-                return
-            }
-            
-            guard let data = data else {
-                print("No data received")
-                DispatchQueue.main.async {
-                    completion([])
-                }
-                return
-            }
-            
-            do {
-                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
-                let tasks = decodedResponse.todos.map { apiTask -> TaskEntity in
-                    TaskEntity(
-                        id: UUID(),
-                        title: apiTask.todo,
-                        details: "",
-                        createdAt: Date(),
-                        isCompleted: apiTask.completed
-                    )
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Failed to fetch tasks: \(error)")
+                    DispatchQueue.main.async {
+                        completion([])
+                    }
+                    return
                 }
                 
-                // Сохраняем задачи в Core Data
-                self.saveTasksToCoreData(tasks: tasks)
+                guard let data = data else {
+                    print("No data received")
+                    DispatchQueue.main.async {
+                        completion([])
+                    }
+                    return
+                }
                 
-                // Возвращаем результат в основной поток
-                DispatchQueue.main.async {
-                    completion(tasks)
+                do {
+                    let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                    let tasks = decodedResponse.todos.map { apiTask -> TaskEntity in
+                        TaskEntity(
+                            id: UUID(),
+                            title: apiTask.todo,
+                            details: "",
+                            createdAt: Date(),
+                            isCompleted: apiTask.completed
+                        )
+                    }
+                    
+                    self.saveTasksToCoreData(tasks: tasks)
+                    
+                    DispatchQueue.main.async {
+                        completion(tasks)
+                    }
+                } catch {
+                    print("Failed to decode tasks: \(error)")
+                    DispatchQueue.main.async {
+                        completion([])
+                    }
                 }
-            } catch {
-                print("Failed to decode tasks: \(error)")
-                DispatchQueue.main.async {
-                    completion([])
-                }
-            }
-        }.resume()
+            }.resume()
+        }
     }
-    
-    
+
     // Save tasks to Core Data
     private func saveTasksToCoreData(tasks: [TaskEntity]) {
         queue.async(flags: .barrier) { [weak self] in
@@ -256,4 +246,6 @@ final class TaskInteractor: TaskInteractorProtocol {
         }
     }
 }
+
+
 
