@@ -56,11 +56,10 @@ struct HeaderView: View {
             .padding(.horizontal, 16)
             .frame(height: 49)
             .background(Color(hex: "#272729"))
-
-
         }
     }
 }
+
 // Расширение для использования hex-кодов в SwiftUI
 extension Color {
     init(hex: String) {

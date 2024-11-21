@@ -13,7 +13,7 @@ struct TaskCardView: View {
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yy" // Форматирует дату как "20/11/24"
+        formatter.dateFormat = "dd/MM/yy" 
         return formatter
     }()
 
