@@ -21,14 +21,12 @@ struct ContentView: View {
                     editingTask: $editingTask
                 )
 
-                HeaderView(
+                FooterView(
                     showNewTaskForm: $showNewTaskForm,
                     editingTask: $editingTask,
                     presenter: presenter
                 )
-
             }
-            .navigationTitle("Задачи")
         }
     }
 }

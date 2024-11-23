@@ -11,13 +11,13 @@ struct NewTaskView: View {
     @Binding var isPresented: Bool
     @ObservedObject var presenter: TaskPresenter
     @Binding var taskToEdit: TaskEntity?
-
+    
     @State private var title: String = ""
     @State private var details: String = ""
-
+    
     @State private var showErrorAlert = false
     @State private var errorMessage: String?
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -25,7 +25,7 @@ struct NewTaskView: View {
                     TextField("Title", text: $title)
                     TextField("Details", text: $details)
                 }
-
+                
                 Section {
                     Button(taskToEdit == nil ? "Add Task" : "Save Changes") {
                         if let task = taskToEdit {
