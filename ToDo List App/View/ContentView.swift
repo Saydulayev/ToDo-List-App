@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var presenter: TaskPresenter
+    var presenter: TaskPresenter
     @State private var showNewTaskForm: Bool = false
     @State private var editingTask: TaskEntity? = nil
 
