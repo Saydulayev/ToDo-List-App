@@ -56,6 +56,7 @@ struct TaskCardView: View {
                         .font(.custom("SF Pro Text", size: 12))
                         .foregroundStyle(.secondary)
                 }
+                Spacer()
             }
             .frame(maxHeight: .infinity)
             

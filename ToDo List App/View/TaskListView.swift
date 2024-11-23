@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct TaskListView: View {
-    @ObservedObject var presenter: TaskPresenter
+    @State var presenter: TaskPresenter
     @Binding var showNewTaskForm: Bool
     @Binding var editingTask: TaskEntity?
-
+    
     @State private var searchText = ""
     @State private var showAlert = false
     @State private var taskToDelete: TaskEntity?
-
+    
+    
     var body: some View {
         VStack {
             SearchBarView(searchText: $searchText)
-
+            
             List {
                 ForEach(filteredTasks, id: \.id) { task in
                     NavigationLink(value: task) {
@@ -37,7 +38,7 @@ struct TaskListView: View {
                             onDelete: {
                                 taskToDelete = task
                                 showAlert.toggle()
-                            }
+                            } 
                         )
                     }
                 }
@@ -52,7 +53,7 @@ struct TaskListView: View {
         }
         .navigationTitle("Задачи")
     }
-
+    
     private var filteredTasks: [TaskEntity] {
         if searchText.isEmpty {
             return presenter.tasks
@@ -63,7 +64,7 @@ struct TaskListView: View {
             }
         }
     }
-
+    
     private var taskDeleteAlert: Alert {
         Alert(
             title: Text("Удалить задачу"),
@@ -73,7 +74,7 @@ struct TaskListView: View {
                     presenter.deleteTask(task: taskToDelete)
                 }
             },
-            secondaryButton: .cancel()
+            secondaryButton: .cancel(Text("Отменить"))
         )
     }
 }

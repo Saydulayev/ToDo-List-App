@@ -7,8 +7,9 @@
 
 import Foundation
 
-final class TaskPresenter: TaskPresenterProtocol, ObservableObject {
-    @Published var tasks: [TaskEntity] = []
+@Observable
+final class TaskPresenter: TaskPresenterProtocol {
+    var tasks: [TaskEntity] = []
     private let interactor: TaskInteractorProtocol
     let router: TaskRouter // Теперь презентер содержит роутер
 
