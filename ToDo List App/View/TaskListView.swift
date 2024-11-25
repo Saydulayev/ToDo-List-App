@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TaskListView: View {
-    @State var presenter: TaskPresenter
+    var presenter: TaskPresenter
     @Binding var showNewTaskForm: Bool
     @Binding var editingTask: TaskEntity?
     
@@ -16,39 +16,42 @@ struct TaskListView: View {
     @State private var showAlert = false
     @State private var taskToDelete: TaskEntity?
     
-    
     var body: some View {
         VStack {
             SearchBarView(searchText: $searchText)
             
             List {
                 ForEach(filteredTasks, id: \.id) { task in
-                    NavigationLink(value: task) {
+                    NavigationLink(destination: TaskDetailView(task: task)) {
                         TaskCardView(task: task, presenter: presenter)
+                            .contextMenu {
+                                TaskContextMenu(
+                                    task: task,
+                                    onEdit: {
+                                        editingTask = task
+                                        showNewTaskForm.toggle()
+                                    },
+                                    onDelete: {
+                                        taskToDelete = task
+                                        showAlert.toggle()
+                                    }
+                                )
+                            } preview: {
+                                SelectedTaskView(task: task)
+                                    .frame(width: 350)
+                                    .background(Color(#colorLiteral(red: 0.153, green: 0.153, blue: 0.158, alpha: 1)))
+                                    .cornerRadius(12)
+                            }
                     }
+                    .buttonStyle(PlainButtonStyle())
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
-                    .contextMenu {
-                        TaskContextMenu(
-                            task: task,
-                            onEdit: {
-                                editingTask = task
-                                showNewTaskForm.toggle()
-                            },
-                            onDelete: {
-                                taskToDelete = task
-                                showAlert.toggle()
-                            } 
-                        )
-                    }
                 }
             }
             .listStyle(.insetGrouped)
+            .background(Color.clear)
             .alert(isPresented: $showAlert) {
                 taskDeleteAlert
-            }
-            .navigationDestination(for: TaskEntity.self) { task in
-                TaskDetailView(task: task)
             }
         }
         .navigationTitle("Задачи")
@@ -81,6 +84,43 @@ struct TaskListView: View {
 
 
 
+struct SelectedTaskView: View {
+    var task: TaskEntity
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Заголовок задачи
+            Text(task.title)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.white)
+                .lineLimit(1)
+            
+            // Детали задачи
+            if !task.details.isEmpty {
+                Text(task.details)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.white)
+                    .lineLimit(3)
+            }
+            
+            // Дата создания
+            Text(formattedDate(task.createdAt))
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(.white.opacity(0.5))
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)  
+        .background(Color(#colorLiteral(red: 0.1531544924, green: 0.1531046033, blue: 0.1584302485, alpha: 1)))
+        .cornerRadius(12)
+    }
+    
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter.string(from: date)
+    }
+}
+
 
 private struct TaskContextMenu: View {
     var task: TaskEntity
@@ -90,7 +130,7 @@ private struct TaskContextMenu: View {
     var body: some View {
         Group {
             Button(action: onEdit) {
-                Label("Редактировать", systemImage: "pencil")
+                Label("Редактировать", systemImage: "pencil") 
             }
             Button(action: {
                 shareTask(task)
@@ -125,4 +165,3 @@ private struct TaskContextMenu: View {
         return formatter.string(from: date)
     }
 }
-

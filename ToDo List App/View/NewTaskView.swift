@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct NewTaskView: View {
     @Binding var isPresented: Bool
     @ObservedObject var presenter: TaskPresenter
@@ -21,13 +22,13 @@ struct NewTaskView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Task Details")) {
-                    TextField("Title", text: $title)
-                    TextField("Details", text: $details)
+                Section(header: Text("Детали задачи")) { 
+                    TextField("Название", text: $title)
+                    TextField("Описание", text: $details)
                 }
                 
                 Section {
-                    Button(taskToEdit == nil ? "Add Task" : "Save Changes") {
+                    Button(taskToEdit == nil ? "Добавить задачу" : "Сохранить изменения") {
                         if let task = taskToEdit {
                             presenter.updateTask(task: TaskEntity(
                                 id: task.id,
@@ -39,7 +40,7 @@ struct NewTaskView: View {
                                 if success {
                                     isPresented = false
                                 } else {
-                                    errorMessage = "Another task with the same title already exists."
+                                    errorMessage = "Задача с таким названием уже существует." 
                                     showErrorAlert = true
                                 }
                             }
@@ -48,7 +49,7 @@ struct NewTaskView: View {
                                 if success {
                                     isPresented = false
                                 } else {
-                                    errorMessage = "Task with the same title already exists."
+                                    errorMessage = "Задача с таким названием уже существует."
                                     showErrorAlert = true
                                 }
                             }
@@ -57,8 +58,8 @@ struct NewTaskView: View {
                     .disabled(title.count < 3)
                 }
             }
-            .navigationTitle(taskToEdit == nil ? "New Task" : "Edit Task")
-            .navigationBarItems(leading: Button("Cancel") {
+            .navigationTitle(taskToEdit == nil ? "Новая задача" : "Редактировать задачу")
+            .navigationBarItems(leading: Button("Отмена") {
                 isPresented = false
             })
             .onAppear {
@@ -68,7 +69,11 @@ struct NewTaskView: View {
                 }
             }
             .alert(isPresented: $showErrorAlert) {
-                Alert(title: Text("Error"), message: Text(errorMessage ?? "An error occurred"), dismissButton: .default(Text("OK")))
+                Alert(
+                    title: Text("Ошибка"),
+                    message: Text(errorMessage ?? "Произошла ошибка"),
+                    dismissButton: .default(Text("OK"))
+                )
             }
         }
     }

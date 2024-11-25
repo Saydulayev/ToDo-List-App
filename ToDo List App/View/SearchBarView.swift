@@ -9,7 +9,7 @@ import SwiftUI
 import Speech
 
 struct SearchBarView: View {
-    @Binding var searchText: String // Привязка для состояния текста
+    @Binding var searchText: String
     @State private var isListening = false
     @State private var speechRecognizer = SFSpeechRecognizer()
     @State private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -19,25 +19,25 @@ struct SearchBarView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color(red: 0.15, green: 0.15, blue: 0.16))
-                .frame(width: 360, height: 36)
+                .fill(Color(#colorLiteral(red: 0.1531544924, green: 0.1531046033, blue: 0.1584302485, alpha: 1)))
+                .frame(width: 370, height: 36)
             
             HStack(spacing: 3) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color.white.opacity(0.5))
+                    .foregroundStyle(Color.white.opacity(0.5))
                     .frame(width: 20, height: 22)
                 
                 TextField("Search", text: $searchText)
                     .font(.custom("SF Pro Text", size: 17))
-                    .foregroundColor(Color.white.opacity(0.5))
+                    .foregroundStyle(Color.white.opacity(0.5))
                     .frame(height: 22)
                     .lineLimit(1)
                 
                 Spacer()
                 
                 Button(action: toggleListening) {
-                    Image(systemName: isListening ? "mic.fill" : "mic")
-                        .foregroundColor(isListening ? .red : Color.white.opacity(0.5))
+                    Image(systemName: isListening ? "microphone.badge.ellipsis.fill" : "microphone.fill")
+                        .foregroundStyle(isListening ? .red : Color.white.opacity(0.5))
                         .frame(width: 17, height: 22)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 7)
@@ -118,7 +118,3 @@ struct SearchBarView: View {
     }
 }
 
-
-//#Preview {
-//    SearchBarView()
-//}

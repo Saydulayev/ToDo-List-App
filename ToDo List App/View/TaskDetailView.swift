@@ -14,27 +14,25 @@ struct TaskDetailView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(task.title)
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(.white)
+            Text(task.title)
+                .font(.system(size: 34, weight: .bold))
+                .kerning(0.4)
+                .foregroundStyle(.white)
 
-                Text(formattedDate(task.createdAt))
-                    .font(.custom("SFProText-Regular", size: 12))
-                    .foregroundColor(.white).opacity(0.5)
-            }
-            .frame(width: 320, alignment: .leading)
+            Text(formattedDate(task.createdAt))
+                .font(.custom("SFProText-Regular", size: 12))
+                .foregroundStyle(.gray.opacity(0.7))
+
 
             Text(task.details)
                 .font(.system(size: 16, weight: .regular))
                 .lineSpacing(6)
-                .foregroundColor(.white)
-                .frame(width: 320, alignment: .leading)
-                .padding(.vertical)
-
+                .foregroundStyle(.white)
             Spacer()
         }
         .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {

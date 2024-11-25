@@ -48,7 +48,7 @@ struct FooterView: View {
             }
             .padding(.horizontal, 16)
             .frame(height: 49)
-            .background(Color(.systemGray5))
+            .background(Color(#colorLiteral(red: 0.1531544924, green: 0.1531046033, blue: 0.1584302485, alpha: 1)))
         }
     }
     func taskCountText(for count: Int) -> String {
