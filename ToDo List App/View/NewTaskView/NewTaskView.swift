@@ -100,47 +100,6 @@ struct NewTaskView: View {
     }
 }
 
-struct TaskDetailsSection: View {
-    @Binding var title: String
-    @Binding var details: String
 
-    private struct Constants {
-        static let taskDetailsHeader = "Детали задачи"
-        static let titlePlaceholder = "Название"
-        static let descriptionPlaceholder = "Описание"
-    }
-
-    var body: some View {
-        Section(header: Text(Constants.taskDetailsHeader)) {
-            TextField(Constants.titlePlaceholder, text: $title)
-            TextField(Constants.descriptionPlaceholder, text: $details)
-        }
-    }
-}
-
-struct SaveButtonSection: View {
-    let isEditing: Bool
-    let title: String
-    let onSave: () -> Void
-
-    private struct Constants {
-        static let addButtonTitle = "Добавить задачу"
-        static let saveButtonTitle = "Сохранить изменения"
-        static let minTitleLength = 3
-    }
-
-    var body: some View {
-        Section {
-            Button(actionTitle) {
-                onSave()
-            }
-            .disabled(title.count < Constants.minTitleLength)
-        }
-    }
-
-    private var actionTitle: String {
-        isEditing ? Constants.saveButtonTitle : Constants.addButtonTitle
-    }
-}
 
 
