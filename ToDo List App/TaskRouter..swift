@@ -7,8 +7,7 @@
 
 import Foundation
 
-
-final class TaskRouter: ObservableObject {
+final class TaskRouter: TaskRouterProtocol {
     @Published var showTaskDetail = false
     var selectedTask: TaskEntity?
 

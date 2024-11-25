@@ -13,6 +13,9 @@ struct TaskModuleBuilder {
         let router = TaskRouter()
         let presenter = TaskPresenter(interactor: interactor, router: router)
         
-        return ContentView(presenter: presenter)
+        let contentView = ContentView(presenter: presenter)
+        
+        return contentView
     }
 }
+

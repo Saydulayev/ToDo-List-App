@@ -12,7 +12,7 @@ import Observation
 final class TaskPresenter: TaskPresenterProtocol {
     var tasks: [TaskEntity] = []
     private let interactor: TaskInteractorProtocol
-    let router: TaskRouter
+    private let router: TaskRouterProtocol
     var searchText: String = "" {
         didSet {
             if searchText.isEmpty {
