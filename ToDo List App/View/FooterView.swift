@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Observation
 
 struct FooterView: View {
     @Binding var showNewTaskForm: Bool
     @Binding var editingTask: TaskEntity?
-    @ObservedObject var presenter: TaskPresenter
+    @Bindable var presenter: TaskPresenter
 
     var body: some View {
         VStack(spacing: 0) {

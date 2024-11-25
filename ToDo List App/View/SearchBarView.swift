@@ -25,12 +25,11 @@ struct SearchBarView: View {
             HStack(spacing: 3) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(Color.white.opacity(0.5))
-                    .frame(width: 20, height: 22)
+
                 
                 TextField("Search", text: $searchText)
                     .font(.custom("SF Pro Text", size: 17))
-                    .foregroundStyle(Color.white.opacity(0.5))
-                    .frame(height: 22)
+                    .foregroundStyle(.white)
                     .lineLimit(1)
                 
                 Spacer()
@@ -38,9 +37,8 @@ struct SearchBarView: View {
                 Button(action: toggleListening) {
                     Image(systemName: isListening ? "microphone.badge.ellipsis.fill" : "microphone.fill")
                         .foregroundStyle(isListening ? .red : Color.white.opacity(0.5))
-                        .frame(width: 17, height: 22)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 7)
+                        .frame(width: 17)
+
                 }
             }
             .padding(.horizontal, 26)

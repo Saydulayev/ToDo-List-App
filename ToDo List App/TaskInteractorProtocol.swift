@@ -13,4 +13,5 @@ protocol TaskInteractorProtocol {
     func addTask(title: String, details: String, onSuccess: @escaping () -> Void, onFailure: @escaping (Error?) -> Void)
     func updateTask(task: TaskEntity, onSuccess: @escaping () -> Void, onFailure: @escaping (Error?) -> Void)
     func deleteTask(task: TaskEntity, completion: @escaping () -> Void)
+    func searchTasks(query: String, completion: @escaping ([TaskEntity]) -> Void) // Новый метод
 }

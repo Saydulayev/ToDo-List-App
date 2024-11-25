@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Observation
 
 struct TaskCardView: View {
     var task: TaskEntity
-    var presenter: TaskPresenter
+    @Bindable var presenter: TaskPresenter
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

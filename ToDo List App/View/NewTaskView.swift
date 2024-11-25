@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Observation
 
 
 struct NewTaskView: View {
     @Binding var isPresented: Bool
-    @ObservedObject var presenter: TaskPresenter
+    @Bindable var presenter: TaskPresenter
     @Binding var taskToEdit: TaskEntity?
     
     @State private var title: String = ""

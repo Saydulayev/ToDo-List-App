@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import Observation
 
 struct ContentView: View {
-    var presenter: TaskPresenter
+    @Bindable var presenter: TaskPresenter
     @State private var showNewTaskForm: Bool = false
     @State private var editingTask: TaskEntity? = nil
 

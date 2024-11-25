@@ -8,7 +8,6 @@
 import CoreData
 import Foundation
 
-
 final class TaskInteractor: TaskInteractorProtocol {
     
     private enum Constants {
@@ -27,23 +26,33 @@ final class TaskInteractor: TaskInteractorProtocol {
             let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
             do {
                 let tasks = try self.context.fetch(fetchRequest)
-                let taskEntities = tasks.compactMap { task -> TaskEntity? in
-                    guard let id = task.id, let title = task.title, let details = task.details, let createdAt = task.createdAt else {
-                        return nil
-                    }
-                    return TaskEntity(
-                        id: id,
-                        title: title,
-                        details: details,
-                        createdAt: createdAt,
-                        isCompleted: task.isCompleted
-                    )
-                }
+                let taskEntities = self.convertTasksToEntities(tasks: tasks)
                 DispatchQueue.main.async {
                     completion(taskEntities)
                 }
             } catch {
                 print("Failed to fetch tasks: \(error)")
+                DispatchQueue.main.async {
+                    completion([])
+                }
+            }
+        }
+    }
+
+    // Новый метод для поиска задач
+    func searchTasks(query: String, completion: @escaping ([TaskEntity]) -> Void) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title CONTAINS[cd] %@ OR details CONTAINS[cd] %@", query, query)
+            do {
+                let tasks = try self.context.fetch(fetchRequest)
+                let taskEntities = self.convertTasksToEntities(tasks: tasks)
+                DispatchQueue.main.async {
+                    completion(taskEntities)
+                }
+            } catch {
+                print("Failed to search tasks: \(error)")
                 DispatchQueue.main.async {
                     completion([])
                 }
@@ -245,7 +254,24 @@ final class TaskInteractor: TaskInteractorProtocol {
             print("Failed to save context: \(error)")
         }
     }
+
+    // Helper method to convert Core Data objects to TaskEntity
+    private func convertTasksToEntities(tasks: [Task]) -> [TaskEntity] {
+        return tasks.compactMap { task -> TaskEntity? in
+            guard let id = task.id, let title = task.title, let details = task.details, let createdAt = task.createdAt else {
+                return nil
+            }
+            return TaskEntity(
+                id: id,
+                title: title,
+                details: details,
+                createdAt: createdAt,
+                isCompleted: task.isCompleted
+            )
+        }
+    }
 }
+
 
 
 

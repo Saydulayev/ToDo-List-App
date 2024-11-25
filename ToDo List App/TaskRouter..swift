@@ -6,18 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
-
-
-struct TaskModuleBuilder {
-    static func createModule() -> some View {
-        let interactor = TaskInteractor()
-        let router = TaskRouter()
-        let presenter = TaskPresenter(interactor: interactor, router: router)
-        
-        return ContentView(presenter: presenter)
-    }
-}
 
 
 final class TaskRouter: ObservableObject {
