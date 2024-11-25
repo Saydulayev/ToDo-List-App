@@ -16,32 +16,58 @@ struct SearchBarView: View {
     @State private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
     
+    private struct Constants {
+        
+        static let backgroundColor = Color(red: 0.153, green: 0.153, blue: 0.158)
+        static let iconColor = Color.white.opacity(0.5)
+        static let textColor = Color.white.opacity(0.5)
+        static let listeningColor = Color.red
+        
+        
+        static let cornerRadius: CGFloat = 10
+        static let frameWidth: CGFloat = 370
+        static let frameHeight: CGFloat = 36
+        static let hStackSpacing: CGFloat = 3
+        static let horizontalPadding: CGFloat = 26
+        static let iconWidth: CGFloat = 17
+        
+        
+        static let fontName = "SF Pro Text"
+        static let fontSize: CGFloat = 17
+        
+        
+        static let searchIconName = "magnifyingglass"
+        static let microphoneIconName = "microphone.fill"
+        static let microphoneActiveIconName = "microphone.badge.ellipsis.fill"
+        
+        
+        static let searchPlaceholder = "Search"
+    }
+    
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(#colorLiteral(red: 0.1531544924, green: 0.1531046033, blue: 0.1584302485, alpha: 1)))
-                .frame(width: 370, height: 36)
+            RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                .fill(Constants.backgroundColor)
+                .frame(width: Constants.frameWidth, height: Constants.frameHeight)
             
-            HStack(spacing: 3) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(Color.white.opacity(0.5))
-
+            HStack(spacing: Constants.hStackSpacing) {
+                Image(systemName: Constants.searchIconName)
+                    .foregroundColor(Constants.iconColor)
                 
-                TextField("Search", text: $searchText)
-                    .font(.custom("SF Pro Text", size: 17))
-                    .foregroundStyle(.white)
+                TextField(Constants.searchPlaceholder, text: $searchText)
+                    .font(.custom(Constants.fontName, size: Constants.fontSize))
+                    .foregroundColor(Constants.textColor)
                     .lineLimit(1)
                 
                 Spacer()
                 
                 Button(action: toggleListening) {
-                    Image(systemName: isListening ? "microphone.badge.ellipsis.fill" : "microphone.fill")
-                        .foregroundStyle(isListening ? .red : Color.white.opacity(0.5))
-                        .frame(width: 17)
-
+                    Image(systemName: isListening ? Constants.microphoneActiveIconName : Constants.microphoneIconName)
+                        .foregroundColor(isListening ? Constants.listeningColor : Constants.iconColor)
+                        .frame(width: Constants.iconWidth)
                 }
             }
-            .padding(.horizontal, 26)
+            .padding(.horizontal, Constants.horizontalPadding)
         }
         .onAppear {
             requestSpeechAuthorization()
@@ -83,6 +109,7 @@ struct SearchBarView: View {
         }
         
         let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.removeTap(onBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
             recognitionRequest.append(buffer)
         }
@@ -107,12 +134,11 @@ struct SearchBarView: View {
             switch status {
             case .authorized:
                 print("Speech recognition authorized")
-            case .denied, .restricted, .notDetermined:
+            default:
                 print("Speech recognition not available")
-            @unknown default:
-                fatalError()
             }
         }
     }
 }
+
 

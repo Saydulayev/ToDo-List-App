@@ -13,31 +13,50 @@ struct FooterView: View {
     @Binding var editingTask: TaskEntity?
     @Bindable var presenter: TaskPresenter
 
+    private struct Constants {
+
+        static let horizontalPadding: CGFloat = 16
+        static let footerHeight: CGFloat = 49
+        static let buttonSize: CGFloat = 28
+        static let buttonFontSize: CGFloat = 22
+        static let taskCountFontSize: CGFloat = 11
+        static let taskCountKerning: CGFloat = 0.06
+        static let taskCountLineSpacing: CGFloat = 13
+        static let taskCountSpacing: CGFloat = 4
+        
+        
+        static let backgroundColor = Color(red: 0.153, green: 0.153, blue: 0.158)
+        static let taskCountTextColor = Color.white
+        static let addButtonColor = Color.yellow
+        
+        
+        static let taskCountFontName = "SF Pro"
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 Spacer()
 
-                // Отображение количества задач
-                HStack(spacing: 4) {
+
+                HStack(spacing: Constants.taskCountSpacing) {
                     Text(taskCountText(for: presenter.tasks.count))
                 }
-                .font(.custom("SF Pro", size: 11))
-                .foregroundStyle(.white)
-                .kerning(0.06)
-                .lineSpacing(13)
+                .font(.custom(Constants.taskCountFontName, size: Constants.taskCountFontSize))
+                .foregroundStyle(Constants.taskCountTextColor)
+                .kerning(Constants.taskCountKerning)
+                .lineSpacing(Constants.taskCountLineSpacing)
 
                 Spacer()
 
-                // Кнопка "Добавить задачу"
                 Button(action: {
                     editingTask = nil
                     showNewTaskForm.toggle()
                 }) {
                     Image(systemName: "square.and.pencil")
-                        .font(.system(size: 22, weight: .regular))
-                        .foregroundStyle(.yellow)
-                        .frame(width: 28, height: 28)
+                        .font(.system(size: Constants.buttonFontSize, weight: .regular))
+                        .foregroundStyle(Constants.addButtonColor)
+                        .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                 }
                 .sheet(isPresented: $showNewTaskForm) {
                     NewTaskView(
@@ -47,11 +66,12 @@ struct FooterView: View {
                     )
                 }
             }
-            .padding(.horizontal, 16)
-            .frame(height: 49)
-            .background(Color(#colorLiteral(red: 0.1531544924, green: 0.1531046033, blue: 0.1584302485, alpha: 1)))
+            .padding(.horizontal, Constants.horizontalPadding)
+            .frame(height: Constants.footerHeight)
+            .background(Constants.backgroundColor)
         }
     }
+
     func taskCountText(for count: Int) -> String {
         let remainder10 = count % 10
         let remainder100 = count % 100

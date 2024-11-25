@@ -11,16 +11,45 @@ import Observation
 struct TaskCardView: View {
     var task: TaskEntity
     @Bindable var presenter: TaskPresenter
-    
+
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yy"
+        formatter.dateFormat = Constants.dateFormat
         return formatter
     }()
-    
+
+    private struct Constants {
+        
+        static let titleFontName = "SF Pro"
+        static let detailsFontName = "SF Pro Text"
+        static let titleFontSize: CGFloat = 16
+        static let detailsFontSize: CGFloat = 12
+
+        
+        static let completedColor = Color.secondary
+        static let activeColor = Color.white
+        static let iconCompletedColor = Color.yellow
+        static let iconActiveColor = Color.secondary
+        static let dividerColor = Color.gray
+
+        
+        static let vStackSpacing: CGFloat = 12
+        static let hStackSpacing: CGFloat = 12
+        static let innerVStackSpacing: CGFloat = 6
+        static let paddingHorizontal: CGFloat = 12
+        static let frameWidth: CGFloat = 360
+        static let iconSize: CGFloat = 24
+        static let iconOffsetY: CGFloat = 9
+
+        
+        static let dateFormat = "dd/MM/yy"
+        static let tracking: CGFloat = -0.43
+        static let lineSpacing: CGFloat = 2
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
+        VStack(alignment: .leading, spacing: Constants.vStackSpacing) {
+            HStack(alignment: .firstTextBaseline, spacing: Constants.hStackSpacing) {
                 Button(action: {
                     presenter.toggleTaskCompletion(task: task)
                     let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -28,46 +57,46 @@ struct TaskCardView: View {
                 }) {
                     Image(systemName: task.isCompleted ? "checkmark.circle" : "circle")
                         .resizable()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(task.isCompleted ? .yellow : .secondary)
+                        .frame(width: Constants.iconSize, height: Constants.iconSize)
+                        .foregroundColor(task.isCompleted ? Constants.iconCompletedColor : Constants.iconActiveColor)
                         .fontWeight(.thin)
-                        .offset(y: 9)
+                        .offset(y: Constants.iconOffsetY)
                 }
                 .buttonStyle(PlainButtonStyle())
-                
-                // Текст
-                VStack(alignment: .leading, spacing: 6) {
+
+                VStack(alignment: .leading, spacing: Constants.innerVStackSpacing) {
                     Text(task.title)
-                        .font(.custom("SF Pro", size: 16))
+                        .font(.custom(Constants.titleFontName, size: Constants.titleFontSize))
                         .fontWeight(.medium)
                         .strikethrough(task.isCompleted)
-                        .foregroundColor(task.isCompleted ? .secondary : .white)
-                        .tracking(-0.43)
+                        .foregroundColor(task.isCompleted ? Constants.completedColor : Constants.activeColor)
+                        .tracking(Constants.tracking)
                         .lineLimit(1)
-                    
+
                     if !task.details.isEmpty {
                         Text(task.details)
-                            .font(.custom("SF Pro Text", size: 12))
-                            .lineSpacing(2)
-                            .foregroundColor(task.isCompleted ? .secondary : .white)
+                            .font(.custom(Constants.detailsFontName, size: Constants.detailsFontSize))
+                            .lineSpacing(Constants.lineSpacing)
+                            .foregroundColor(task.isCompleted ? Constants.completedColor : Constants.activeColor)
                             .lineLimit(2)
                     }
-                    
+
                     Text(dateFormatter.string(from: task.createdAt))
-                        .font(.custom("SF Pro Text", size: 12))
+                        .font(.custom(Constants.detailsFontName, size: Constants.detailsFontSize))
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
             }
             .frame(maxHeight: .infinity)
-            
+
             Divider()
-                .background(.gray)
+                .background(Constants.dividerColor)
         }
-        .padding(.horizontal, 12)
-        .frame(width: 360)
+        .padding(.horizontal, Constants.paddingHorizontal)
+        .frame(width: Constants.frameWidth)
     }
 }
+
 
 
 

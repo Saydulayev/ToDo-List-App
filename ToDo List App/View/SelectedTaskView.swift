@@ -10,31 +10,46 @@ import SwiftUI
 struct SelectedTaskView: View {
     var task: TaskEntity
     
+    private struct Constants {
+        
+        static let titleFontSize: CGFloat = 18
+        static let detailsFontSize: CGFloat = 14
+        static let dateFontSize: CGFloat = 12
+        
+        
+        static let titleColor = Color.white
+        static let detailsColor = Color.white
+        static let dateColor = Color.white.opacity(0.5)
+        static let backgroundColor = Color(.systemGray6)
+        
+        
+        static let spacing: CGFloat = 8
+        static let cornerRadius: CGFloat = 12
+        static let padding: CGFloat = 16
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Заголовок задачи
+        VStack(alignment: .leading, spacing: Constants.spacing) {
             Text(task.title)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.white)
+                .font(.system(size: Constants.titleFontSize, weight: .bold))
+                .foregroundColor(Constants.titleColor)
                 .lineLimit(1)
             
-            // Детали задачи
             if !task.details.isEmpty {
                 Text(task.details)
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(.white)
+                    .font(.system(size: Constants.detailsFontSize, weight: .regular))
+                    .foregroundColor(Constants.detailsColor)
                     .lineLimit(3)
             }
             
-            // Дата создания
             Text(formattedDate(task.createdAt))
-                .font(.system(size: 12, weight: .regular))
-                .foregroundColor(.white.opacity(0.5))
+                .font(.system(size: Constants.dateFontSize, weight: .regular))
+                .foregroundColor(Constants.dateColor)
         }
-        .padding()
+        .padding(Constants.padding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemGray6))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(Constants.backgroundColor)
+        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
     }
     
     private func formattedDate(_ date: Date) -> String {
@@ -43,5 +58,6 @@ struct SelectedTaskView: View {
         return formatter.string(from: date)
     }
 }
+
 
 

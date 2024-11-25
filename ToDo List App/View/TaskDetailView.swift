@@ -12,37 +12,67 @@ struct TaskDetailView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
+    private struct Constants {
+        
+        static let titleFontSize: CGFloat = 34
+        static let detailsFontSize: CGFloat = 16
+        static let dateFontSize: CGFloat = 12
+        static let titleFontWeight: Font.Weight = .bold
+        static let detailsFontWeight: Font.Weight = .regular
+
+        
+        static let titleColor = Color.white
+        static let detailsColor = Color.white
+        static let dateColor = Color.gray.opacity(0.7)
+        static let backButtonColor = Color.yellow
+
+        
+        static let vStackSpacing: CGFloat = 16
+        static let horizontalPadding: CGFloat = 20
+        static let lineSpacing: CGFloat = 6
+        static let kerning: CGFloat = 0.4
+        static let hStackSpacing: CGFloat = 5
+
+        
+        static let dateFormat = "dd/MM/yy"
+
+        
+        static let backIconName = "chevron.left"
+
+        
+        static let backButtonText = "Назад"
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: Constants.vStackSpacing) {
             Text(task.title)
-                .font(.system(size: 34, weight: .bold))
-                .kerning(0.4)
-                .foregroundStyle(.white)
+                .font(.system(size: Constants.titleFontSize, weight: Constants.titleFontWeight))
+                .kerning(Constants.kerning)
+                .foregroundColor(Constants.titleColor)
 
             Text(formattedDate(task.createdAt))
-                .font(.custom("SFProText-Regular", size: 12))
-                .foregroundStyle(.gray.opacity(0.7))
-
+                .font(.system(size: Constants.dateFontSize))
+                .foregroundColor(Constants.dateColor)
 
             Text(task.details)
-                .font(.system(size: 16, weight: .regular))
-                .lineSpacing(6)
-                .foregroundStyle(.white)
+                .font(.system(size: Constants.detailsFontSize, weight: Constants.detailsFontWeight))
+                .lineSpacing(Constants.lineSpacing)
+                .foregroundColor(Constants.detailsColor)
+
             Spacer()
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, Constants.horizontalPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }) {
-                    HStack(spacing: 5) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.yellow)
-                        Text("Назад")
-                            .foregroundColor(.yellow)
+                    HStack(spacing: Constants.hStackSpacing) {
+                        Image(systemName: Constants.backIconName)
+                            .foregroundColor(Constants.backButtonColor)
+                        Text(Constants.backButtonText)
+                            .foregroundColor(Constants.backButtonColor)
                     }
                 }
             }
@@ -52,7 +82,7 @@ struct TaskDetailView: View {
 
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yy"
+        formatter.dateFormat = Constants.dateFormat
         return formatter.string(from: date)
     }
 }
