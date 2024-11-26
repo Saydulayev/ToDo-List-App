@@ -34,11 +34,8 @@ struct FooterView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
             HStack {
                 Spacer()
-
-
                 HStack(spacing: Constants.taskCountSpacing) {
                     Text(taskCountText(for: presenter.tasks.count))
                 }
@@ -69,7 +66,6 @@ struct FooterView: View {
             .padding(.horizontal, Constants.horizontalPadding)
             .frame(height: Constants.footerHeight)
             .background(Constants.backgroundColor)
-        }
     }
 
     func taskCountText(for count: Int) -> String {

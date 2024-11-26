@@ -65,8 +65,6 @@ struct TaskListView: View {
                     .listRowBackground(Constants.clearColor)
                 }
             }
-            .listStyle(.insetGrouped)
-            .background(Constants.clearColor)
             .alert(isPresented: $showAlert) {
                 taskDeleteAlert
             }

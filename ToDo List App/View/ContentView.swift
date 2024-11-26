@@ -15,7 +15,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
+            VStack {
                 TaskListView(
                     presenter: presenter,
                     showNewTaskForm: $showNewTaskForm,
